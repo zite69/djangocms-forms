@@ -6,7 +6,7 @@ from django import forms
 from django.contrib import admin
 from django.db import models
 from django.template.loader import select_template
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
@@ -60,7 +60,7 @@ class FormFieldInline(admin.StackedInline):
         )
 
 
-class FormPlugin(CMSPluginBase):
+class FormsPlugin(CMSPluginBase):
     name = settings.DJANGOCMS_FORMS_PLUGIN_NAME
     module = settings.DJANGOCMS_FORMS_PLUGIN_MODULE
     model = FormDefinition
@@ -116,7 +116,7 @@ class FormPlugin(CMSPluginBase):
         ])
 
     def render(self, context, instance, placeholder):
-        context = super(FormPlugin, self).render(context, instance, placeholder)
+        context = super().render(context, instance, placeholder)
         request = context['request']
 
         form = FormBuilder(
@@ -134,4 +134,4 @@ class FormPlugin(CMSPluginBase):
         return context
 
 
-plugin_pool.register_plugin(FormPlugin)
+plugin_pool.register_plugin(FormsPlugin)

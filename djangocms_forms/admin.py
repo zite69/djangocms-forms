@@ -15,15 +15,19 @@ from django.shortcuts import redirect
 from django.template.defaultfilters import slugify, yesno
 from django.template.response import TemplateResponse
 from django.utils import timezone
-from django.utils.encoding import force_text
 from django.utils.safestring import mark_safe
 from django.utils.text import Truncator
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from tablib import Dataset
 
 from .conf import settings
 from .forms import SubmissionExportForm
 from .models import Form, FormSubmission
+
+try:
+    from django.utils.encoding import force_text
+except:
+    from django.utils.encoding import force_str as force_text
 
 try:
     from django.contrib.admin.options import IS_POPUP_VAR
@@ -98,7 +102,7 @@ class FormSubmissionAdmin(admin.ModelAdmin):
         Add the export view to urls.
         """
         urls = super(FormSubmissionAdmin, self).get_urls()
-        from django.conf.urls import url
+        from django.urls import path 
 
         def wrap(view):
             def wrapper(*args, **kwargs):
@@ -108,7 +112,7 @@ class FormSubmissionAdmin(admin.ModelAdmin):
         info = self.model._meta.app_label, self.model._meta.model_name
 
         extra_urls = [
-            url(r'^export/$', wrap(self.export_view), name='%s_%s_export' % info),
+            path('export/', wrap(self.export_view), name='%s_%s_export' % info),
         ]
         return extra_urls + urls
 
@@ -163,7 +167,7 @@ class FormSubmissionAdmin(admin.ModelAdmin):
                 message = _('No matching %s found for the given criteria. '
                             'Please try again.') % self.opts.verbose_name_plural
                 self.message_user(request, message, level=messages.WARNING)
-                if request.is_ajax():
+                if request.accepts("application/json"):
                     data = {
                         'reloadBrowser': True,
                         'submissionCount': 0,
@@ -182,7 +186,7 @@ class FormSubmissionAdmin(admin.ModelAdmin):
                         if label not in headers:
                             headers.append(label)
 
-                if request.is_ajax():
+                if request.accepts("application/json"):
                     data = {
                         'reloadBrowser': False,
                         'submissionCount': queryset.count(),

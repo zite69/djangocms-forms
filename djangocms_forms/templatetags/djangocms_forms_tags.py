@@ -1,9 +1,13 @@
 from django import forms, template
 from django.template.defaultfilters import yesno
 from django.utils.safestring import mark_safe
-from django.utils.six import string_types
-from django.utils.translation import ugettext_lazy as _
-from django.utils.encoding import force_text
+from six import string_types
+from django.utils.translation import gettext_lazy as _
+
+try:
+    from django.utils.encoding import force_text
+except:
+    from django.utils.encoding import force_str as force_text
 
 from djangocms_forms.fields import HoneyPotField
 
