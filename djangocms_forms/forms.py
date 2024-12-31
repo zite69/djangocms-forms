@@ -331,9 +331,10 @@ class FormBuilder(forms.Form):
 
     def save_to_db(self, form_data, request, referrer):
         user = request.user if request.user.is_authenticated else None
+        ip, _ = get_client_ip(request)
         FormSubmission.objects.create(
             plugin=self.form_definition.plugin_reference,
-            ip=get_client_ip(request),
+            ip=ip,
             referrer=referrer,
             form_data=form_data,
             created_by=user)
