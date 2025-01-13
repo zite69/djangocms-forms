@@ -239,7 +239,7 @@ class FormBuilder(forms.Form):
         })
 
         if field.choice_values:
-            regex = re.compile('[\s]*\n[\s]*')
+            regex = re.compile(r'[\s]*\n[\s]*')
             choices = regex.split(field.choice_values)
             field_attrs.update({
                 'allowed_file_types': [i.lstrip('.').lower() for i in choices]
@@ -340,7 +340,7 @@ class FormBuilder(forms.Form):
             created_by=user)
 
     def email_submission(self, form_data, request, referrer):
-        mail_to = re.compile('\s*[,;]+\s*').split(self.form_definition.email_to)
+        mail_to = re.compile(r'\s*[,;]+\s*').split(self.form_definition.email_to)
         mail_from = self.form_definition.email_from or None
         mail_subject = self.form_definition.email_subject or \
             'Form Submission - %s' % self.form_definition.name
