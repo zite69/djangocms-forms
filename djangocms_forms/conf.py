@@ -13,7 +13,7 @@ class DjangoCMSFormsConf(AppConf):
     PLUGIN_NAME = _('Form')
     FIELDSETS = None
     FILE_STORAGE_DIR = 'djangocms_forms'
-    FILE_STORAGE = settings.DEFAULT_FILE_STORAGE
+    FILE_STORAGE = settings.STORAGES
 
     ALLOWED_FILE_TYPES = (
         'aac', 'ace', 'ai', 'aiff', 'avi', 'bmp', 'dir', 'doc', 'docx', 'dmg',

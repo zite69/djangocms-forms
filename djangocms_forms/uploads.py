@@ -7,7 +7,7 @@ import os
 import uuid
 
 from django.core.files.base import File
-from django.core.files.storage import get_storage_class
+from django.core.files.storage import storages
 from django.db.models.fields.files import FieldFile
 from django.utils.encoding import force_bytes
 from django.utils.functional import LazyObject
@@ -17,7 +17,7 @@ from .conf import settings
 
 class FileStorage(LazyObject):
     def _setup(self):
-        self._wrapped = get_storage_class(settings.DJANGOCMS_FORMS_FILE_STORAGE)()
+        self._wrapped = storages[settings.DJANGOCMS_FORMS_FILE_STORAGE]()
 
 file_storage = FileStorage()
 
